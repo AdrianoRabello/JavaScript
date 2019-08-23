@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <table id="example" class="display table" style="width:100%" >
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Position</th>
+                <th>pira</th>
+                <th>Salary</th>
+                <th>teste1</th>
+                <th>teste2</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiger</td>
+                <td>Nixon</td>
+                <td>System Architect</td>
+                <td>pira</td>
+                <td>$320.800</td>
+                <td>$320.800</td>
+                <td>$320.800</td>
+            </tr>
+            <tr>
+                <td>Garrett</td>
+                <td>Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>$170.750</td>
+                <td>$170.750</td>
+                <td>$170.750</td>
+            </tr>
+            <tr>
+                <td>Garrett</td>
+                <td>Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>$170.750</td>
+                <td>$0</td>
+                <td>$0</td>
+            </tr>
+            <tr>
+                <td>chipa</td>
+                <td>Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>$170.750</td>
+                <td>$170.750</td>
+                <td>$170.750</td>
+            </tr>
+            <tr>
+                <td>Garrett</td>
+                <td>Winters</td>
+                <td>Accountant</td>
+                <td>Tokyo</td>
+                <td>$170.750</td>
+                <td>$170.750</td>
+                <td>0</td>
+            </tr>
+     
+        </tbody>
+
+    </table>
+
+    <div>
+        <table class="table table-responsive-lg table-bordered">
+            <thead>
+                <th>Total teste1</th>
+                <th>Total teste2</th>
+                <th>Total teste3</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="teste1"> <div id="teste11"></div></td>
+                    <td id="teste2"></td>
+                    <td id="teste3"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="css"> teste </div>
+
+    <script>
+        $(document).ready(function() {
+    $('#example').DataTable( {
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            /*var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,.]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };*/
+            
+            //exibirTotal(1 ,api)
+            exibirTotal(4 ,api)
+            exibirTotal(5 ,api,"#teste1")
+            exibirTotal(6 ,api,"#teste2")
+            //exibirTotal(5 ,api)
+        }
+    } );
+
+
+    function exibirTotal(coluna,api,caraca=''){
+        intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,.]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            }
+        total = api
+                .column( coluna )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Total over this page
+            pageTotal = api
+                .column( coluna, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+           $( api.column( coluna ).footer() ).html(
+                'Total filtro '+formatReal(pageTotal) +' <br>Total geral '+ formatReal(total) +' '
+               
+                
+            );
+            $(caraca).html( 'Total filtro '+formatReal(pageTotal) +' <br>Total geral '+ formatReal(total) +' ')       
+           
+            console.log("#"+caraca+1);
+          
+    }
+
+
+    function formatReal( int ){
+        var tmp = int+'';
+        tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
+        if( tmp.length > 6 )
+                tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+
+        return tmp;
+    }
+} );
+    </script>
+</body>
+</html>
